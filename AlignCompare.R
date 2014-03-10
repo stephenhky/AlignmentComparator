@@ -25,7 +25,7 @@ identify.disagree.regions<-function(exp.scores, act.scores) {
         starts<-append(starts, i)
       }
     } else {
-      if (exp.scores[[i]]==act.scores[[i]]) {
+      if ((exp.scores[[i]]==act.scores[[i]]) || (i==align.len)) {
         open<-FALSE
         ends<-append(ends, i)
       }
