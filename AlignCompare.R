@@ -88,7 +88,7 @@ small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
       if (is.na(Mtol)) {
         comp.boolean<-(Ctol<=tol)
       } else {
-        comp.boolean<-(Mtol<=tol & Ctol<=tol) 
+        comp.boolean<-((Mtol<=tol | abs(exp.type.counts[['M']]-act.type.counts[['M']])<=1) & Ctol<=tol) 
       }
     }
   } else {
