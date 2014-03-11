@@ -23,6 +23,9 @@ identify.disagree.regions<-function(exp.scores, act.scores) {
       if (exp.scores[[i]]!=act.scores[[i]]) {
         open<-TRUE
         starts<-append(starts, i)
+        if (i==align.len) {
+          ends<-append(ends, i)
+        }
       }
     } else {
       if ((exp.scores[[i]]==act.scores[[i]]) || (i==align.len)) {
@@ -82,7 +85,11 @@ small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
     } else {
       Mtol<-abs(exp.type.counts[['M']]-act.type.counts[['M']])/max(exp.type.counts[['M']], act.type.counts[['M']])
       Ctol<-abs(exp.type.counts[['C']]-act.type.counts[['C']])/max(exp.type.counts[['C']], act.type.counts[['C']])
-      comp.boolean<-(Mtol<=tol & Ctol<=tol)
+      if (is.na(Mtol)) {
+        comp.boolean<-(Ctol<=tol)
+      } else {
+        comp.boolean<-(Mtol<=tol & Ctol<=tol) 
+      }
     }
   } else {
     comp.boolean<-FALSE
@@ -106,6 +113,7 @@ smart.align.equal<-function(exp.align, act.align) {
     for (i in 1:len.diff) {
       if (align.equal(shorter.align, substr(longer.align, 1+i-1, nchar(longer.align)-len.diff+i-1))) {
         comp.boolean<-TRUE
+        break
       }
     }
   }
