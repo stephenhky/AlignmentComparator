@@ -89,3 +89,25 @@ small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
   }
   comp.boolean
 }
+
+smart.align.equal<-function(exp.align, act.align) {
+  comp.boolean<-FALSE
+  if (nchar(exp.align)==nchar(act.align)) {
+    comp.boolean<-align.equal(exp.align, act.align)
+  } else {
+    if (nchar(exp.align)>nchar(act.align)) {
+      longer.align<-exp.align
+      shorter.align<-act.align
+    } else {
+      longer.align<-act.align
+      shorter.align<-exp.align
+    }
+    len.diff<-nchar(longer.align)-nchar(shorter.align)
+    for (i in 1:len.diff) {
+      if (align.equal(shorter.align, substr(longer.align, 1+i-1, nchar(longer.align)-len.diff+i-1))) {
+        comp.boolean<-TRUE
+      }
+    }
+  }
+  comp.boolean
+}
