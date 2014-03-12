@@ -68,12 +68,8 @@ num.changetype<-function(align, type) {
 
 small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
   types<-c('C', 'M', 'I', 'D')
-  exp.type.counts<-mapply(function(type) {
-    num.changetype(exp.align, type)
-  }, types)
-  act.type.counts<-mapply(function(type) {
-    num.changetype(act.align, type)
-  }, types)
+  exp.type.counts<-mapply(function(type) {num.changetype(exp.align, type)}, types)
+  act.type.counts<-mapply(function(type) {num.changetype(act.align, type)}, types)
   comp.boolean<-FALSE
   equal.map<-(exp.type.counts==act.type.counts)
   if (equal.map[['I']] & equal.map[['D']]) {
