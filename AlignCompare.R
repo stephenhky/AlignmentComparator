@@ -3,11 +3,8 @@ indel.char.scores<-function(align) {
   score<-0
   for (i in 1:nchar(align)) {
     type<-substr(align, i, i)
-    if (type=='I') {
-      score<-score+1
-    } else if (type=='D') {
-      score<-score-1
-    }
+    delta<-ifelse(type=='I', 1, ifelse(type=='D', -1, 0))
+    score<-score+delta
     scores<-append(scores, score)
   }
   scores
