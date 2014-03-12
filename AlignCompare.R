@@ -23,9 +23,7 @@ identify.disagree.regions<-function(exp.scores, act.scores) {
       if (exp.scores[[i]]!=act.scores[[i]]) {
         open<-TRUE
         starts<-append(starts, i)
-        if (i==align.len) {
-          ends<-append(ends, i)
-        }
+        if (i==align.len) { ends<-append(ends, i) }
       }
     } else {
       if ((exp.scores[[i]]==act.scores[[i]]) || (i==align.len)) {
@@ -47,16 +45,15 @@ align.equal<-function(exp.align, act.align) {
       comp.boolean<-TRUE
     } else {
       for (i in 1:nrow(disagreed.regions)) {
-        comp<-small.segment.align.equal(substr(exp.align, disagreed.regions$Start,
-                                               disagreed.regions$End),
-                                        substr(act.align, disagreed.regions$Start,
-                                               disagreed.regions$End))
-        if (!comp) {
-          comp.boolean<-FALSE
-          break
-        } else {
-          comp.boolean<-TRUE
-        }
+        comp<-small.segment.align.equal(substr(exp.align, 
+                                               disagreed.regions$Start[[i]],
+                                               disagreed.regions$End[[i]]),
+                                        substr(act.align, 
+                                               disagreed.regions$Start[[i]],
+                                               disagreed.regions$End[[i]]))
+        if (is.na(comp)) {comp.boolean<-FALSE}
+        comp.boolean<-comp
+        if (!comp) {break}
       }      
     }
   }
@@ -87,6 +84,8 @@ small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
       Ctol<-abs(exp.type.counts[['C']]-act.type.counts[['C']])/max(exp.type.counts[['C']], act.type.counts[['C']])
       if (is.na(Mtol)) {
         comp.boolean<-(Ctol<=tol)
+      } else if (is.na(Ctol)) {
+        comp.boolean<-(Mtol<=tol)
       } else {
         comp.boolean<-((Mtol<=tol | abs(exp.type.counts[['M']]-act.type.counts[['M']])<=1) & Ctol<=tol) 
       }
