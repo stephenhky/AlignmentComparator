@@ -42,12 +42,10 @@ align.equal<-function(exp.align, act.align) {
       comp.boolean<-TRUE
     } else {
       for (i in 1:nrow(disagreed.regions)) {
-        comp<-small.segment.align.equal(substr(exp.align, 
-                                               disagreed.regions$Start[[i]],
-                                               disagreed.regions$End[[i]]),
-                                        substr(act.align, 
-                                               disagreed.regions$Start[[i]],
-                                               disagreed.regions$End[[i]]))
+        reg.start<-disagreed.regions$Start[[i]]
+        reg.end<-disagreed.regions$End[[i]]
+        comp<-small.segment.align.equal(substr(exp.align, reg.start, reg.end),
+                                        substr(act.align, reg.start, reg.end))
         if (is.na(comp)) {comp.boolean<-FALSE}
         comp.boolean<-comp
         if (!comp) {break}
