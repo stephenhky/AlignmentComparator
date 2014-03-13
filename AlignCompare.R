@@ -74,11 +74,11 @@ small.segment.align.equal<-function(exp.align, act.align, tol=0.5) {
       Mtol<-abs(exp.type.counts[['M']]-act.type.counts[['M']])/max(exp.type.counts[['M']], act.type.counts[['M']])
       Ctol<-abs(exp.type.counts[['C']]-act.type.counts[['C']])/max(exp.type.counts[['C']], act.type.counts[['C']])
       if (is.na(Mtol)) {
-        comp.boolean<-(Ctol<=tol)
+        comp.boolean<-(Ctol<=tol | abs(exp.type.counts[['C']]-act.type.counts[['C']])<=1)
       } else if (is.na(Ctol)) {
-        comp.boolean<-(Mtol<=tol)
+        comp.boolean<-(Mtol<=tol | abs(exp.type.counts[['M']]-act.type.counts[['M']])<=1)
       } else {
-        comp.boolean<-((Mtol<=tol | abs(exp.type.counts[['M']]-act.type.counts[['M']])<=1) & Ctol<=tol) 
+        comp.boolean<-((Mtol<=tol | abs(exp.type.counts[['M']]-act.type.counts[['M']])<=1) & (Ctol<=tol | abs(exp.type.counts[['C']]-act.type.counts[['C']])<=1)) 
       }
     }
   } else {
