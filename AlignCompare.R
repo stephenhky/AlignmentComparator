@@ -104,3 +104,42 @@ smart.align.equal<-function(exp.align, act.align) {
   }
   comp.boolean
 }
+
+score.align<-function(align, match.score=5, mismatch.score=-4, gap.open.score=-30, gap.extend.score=-1) {
+  gap.opened<-FALSE
+  score<-0
+  for (i in 1:nchar(align)) {
+    ch<-substr(align, i, i)
+    if (ch=='C') {
+      score<-score+match.score
+      if (gap.opened) {gap.opened<-FALSE}
+    } else if (ch=='M') {
+      score<-score+mismatch.score
+      if (gap.opened) {gap.opened<-FALSE}
+    } else if ((ch=='I') | (ch=='D')) {
+      score<-score+ifelse(gap.opened, gap.extend.score, gap.open.score)
+      if (!gap.opened) {gap.opened<-TRUE}
+    }
+  }
+  score
+}
+
+is.indel.chopped<-function(align) {
+  chopped<-FALSE
+  greg.results<-gregexpr('([ID]((-*)?))+', align)
+  if (greg.results[[1]][[1]]>0) {
+    first.indel.start<-greg.results[[1]][[1]]
+    first.indel.len<-attr(greg.results[[1]], 'match.length')[[1]]
+    
+    last.indel.start<-greg.results[[1]][[length(greg.results[[1]])]]
+    last.indel.len<-attr(greg.results[[1]], 'match.length')[[length(greg.results[[1]])]]
+    
+    first.indel<-substr(align, 0, first.indel.start+first.indel.len-1)
+    last.indel<-substr(align, last.indel.start, nchar(align))
+    
+    chopped<-((score.align(first.indel)<0) | (score.align(last.indel)<0))
+    #print(score.align(first.indel))
+    #print(score.align(last.indel))
+  }
+  chopped
+}
