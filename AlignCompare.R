@@ -143,3 +143,10 @@ is.indel.chopped<-function(align) {
   }
   chopped
 }
+
+exists.indels.too.close<-function(align, threshold=10) {
+  regex.result<-gregexpr('[ID](([CM(-*)?]+))[ID]', align)
+  lengths<-attr(regex.result[[1]], 'match.length')
+  mindist<-min(lengths)
+  ((mindist>0) & (mindist<threshold+2))
+}
